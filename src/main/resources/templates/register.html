@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIVIC Services - Registration</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .form-header {
+            background: #1a2a6c;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .form-header h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .form-container {
+            padding: 40px 30px;
+        }
+
+        h1 {
+            color: #1a2a6c;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        input:focus {
+            border-color: #1a2a6c;
+            outline: none;
+        }
+
+        input.error {
+            border-color: #dc3545;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #1a2a6c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #0d1a4a;
+        }
+
+        .password-strength {
+            height: 5px;
+            margin-top: 5px;
+            border-radius: 3px;
+            transition: all 0.3s;
+            background: #eee;
+        }
+
+        .password-strength.weak {
+            background: #ff4d4d;
+            width: 33%;
+        }
+
+        .password-strength.medium {
+            background: #ffa64d;
+            width: 66%;
+        }
+
+        .password-strength.strong {
+            background: #4dff4d;
+            width: 100%;
+        }
+
+        .notification {
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .field-error {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .login-link a {
+            color: #1a2a6c;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-header">
+            <h2>CIVIC Services Portal</h2>
+        </div>
+        
+        <div class="form-container">
+            <h1>Create Account</h1>
+            
+            <!-- Display success messages -->
+            <div th:if="${success}" class="notification success" th:text="${success}"></div>
+            
+            <!-- Display error messages -->
+            <div th:if="${error}" class="notification error" th:text="${error}"></div>
+            
+            <form th:action="@{/auth/register}" method="post" th:object="${user}" id="register-form">
+                <div class="input-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" th:field="*{fullName}" required>
+                    <div class="field-error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" th:field="*{email}" required>
+                    <div class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" th:field="*{username}" required>
+                    <div class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" th:field="*{password}" required>
+                    <div id="password-strength" class="password-strength"></div>
+                    <div class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    <div id="confirm-error" class="field-error" style="display: none;"></div>
+                </div>
+                
+                <button type="submit">Create Account</button>
+            </form>
+            
+            <div class="login-link">
+                <p>Already have an account? <a th:href="@{/auth/login}">Login here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const passwordInput = document.getElementById('password');
+        const passwordStrength = document.getElementById('password-strength');
+        const confirmInput = document.getElementById('confirmPassword');
+        const confirmError = document.getElementById('confirm-error');
+        
+        // Password strength indicator
+        passwordInput.addEventListener('input', () => {
+            const password = passwordInput.value;
+            let strength = '';
+            
+            if (password.length === 0) {
+                passwordStrength.className = 'password-strength';
+            } else if (password.length < 6) {
+                passwordStrength.className = 'password-strength weak';
+            } else if (password.length < 10) {
+                passwordStrength.className = 'password-strength medium';
+            } else {
+                passwordStrength.className = 'password-strength strong';
+            }
+        });
+
+        // Password confirmation validation
+        function validatePasswords() {
+            const password = passwordInput.value;
+            const confirm = confirmInput.value;
+            
+            if (confirm && password !== confirm) {
+                confirmError.textContent = 'Passwords do not match';
+                confirmError.style.display = 'block';
+                confirmInput.classList.add('error');
+                return false;
+            } else {
+                confirmError.style.display = 'none';
+                confirmInput.classList.remove('error');
+                return true;
+            }
+        }
+
+        confirmInput.addEventListener('input', validatePasswords);
+        passwordInput.addEventListener('input', validatePasswords);
+
+        // Form submission validation
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            if (!validatePasswords()) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
