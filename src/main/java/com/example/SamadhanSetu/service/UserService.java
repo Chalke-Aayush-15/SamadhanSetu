@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.SamadhanSetu.entity.User;
-import com.example.SamadhanSetu.repository.UserRepo;
+import com.example.SamadhanSetu.dao.Entity.User;
+import com.example.SamadhanSetu.dao.Repository.UserRepo;
 
 @Service
 public class UserService {

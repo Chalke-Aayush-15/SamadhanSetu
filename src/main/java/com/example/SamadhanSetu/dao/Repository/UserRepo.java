@@ -1,11 +1,11 @@
-package com.example.SamadhanSetu.repository;
+package com.example.SamadhanSetu.dao.Repository;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.SamadhanSetu.entity.User;
+import com.example.SamadhanSetu.dao.Entity.User;
 
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> {

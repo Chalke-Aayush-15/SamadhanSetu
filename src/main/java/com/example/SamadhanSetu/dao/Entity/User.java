@@ -1,4 +1,4 @@
-package com.example.SamadhanSetu.entity;
+package com.example.SamadhanSetu.dao.Entity;
 
 import java.time.LocalDateTime;
 
