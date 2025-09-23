@@ -1,6 +1,7 @@
 package com.example.SamadhanSetu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000", "http://localhost:5174"}, allowCredentials = "true")
 public class MainController {
 
 	@Autowired
@@ -65,27 +66,25 @@ public class MainController {
         return "login";
     }
     
- // Handle login
-    @PostMapping("/login")
-    public String loginUser(@RequestParam String username, 
-                           @RequestParam String password, 
-                           HttpSession session, 
-                           Model model, 
-                           RedirectAttributes redirectAttributes) {
-        
-        User user = us.authenticateUser(username, password);
-        
-        if (user != null) {
-            session.setAttribute("loggedInUser", user);
-            redirectAttributes.addFlashAttribute("success", "Login successful!");
-            return "dashboard";
-        } else {
-            model.addAttribute("error", "Invalid username or password!");
-            return "login";
-        }
-    }
-    
- // Handle logout
+     // Handle login
+     @PostMapping("/login")
+     public ResponseEntity<?> loginUser(@RequestParam String username,
+                                        @RequestParam String password,
+                                        HttpSession session) {
+
+         User user = us.authenticateUser(username, password);
+
+         if (user != null) {
+             session.setAttribute("loggedInUser", user);
+             return ResponseEntity.ok().body(Map.of("message", "Login successful!"));
+         } else {
+             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                     .body(Map.of("error", "Invalid username or password!"));
+         }
+     }
+
+
+    // Handle logout
     @GetMapping("/logout")
     public String logout(HttpSession session, RedirectAttributes redirectAttributes) {
         session.invalidate();
