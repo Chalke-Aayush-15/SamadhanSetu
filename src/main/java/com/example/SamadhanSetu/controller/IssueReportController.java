@@ -24,6 +24,7 @@ public class IssueReportController {
     private IssueReportService issueReportService;
 
     @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000", "http://localhost:5174"})
     public ResponseEntity<ApiResponse<IssueReport>> registerIssue(
             @RequestPart("data") String data,
             @RequestPart(value = "photo", required = false) MultipartFile photo) throws Exception {
