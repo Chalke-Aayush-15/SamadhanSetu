@@ -1,6 +1,7 @@
 package com.example.SamadhanSetu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,9 +14,12 @@ import com.example.SamadhanSetu.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/api/auth")
-@CrossOrigin("*")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
 public class MainController {
 
 	@Autowired
@@ -24,28 +28,34 @@ public class MainController {
 	// Show registration form
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("+user", new User());
         return "register";
     }
     
     // Handle registration
+
     @PostMapping("/register")
-    public String registerUser(@Valid @ModelAttribute("user") User user, 
-                              BindingResult bindingResult, 
-                              Model model, 
-                              RedirectAttributes redirectAttributes) {
-        
+    @ResponseBody
+    public ResponseEntity<?> registerUser(@Valid @RequestBody User user,
+                                          BindingResult bindingResult) {
+
         if (bindingResult.hasErrors()) {
-            return "register";
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error ->
+                    errors.put(error.getField(), error.getDefaultMessage())
+            );
+            return ResponseEntity.badRequest().body(errors);
         }
-        
+
         try {
             us.registerUser(user);
-            redirectAttributes.addFlashAttribute("success", "Registration successful! Please login.");
-            return "redirect:/auth/login";
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Registration successful! Please login.");
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            model.addAttribute("error", e.getMessage());
-            return "register";
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
     
