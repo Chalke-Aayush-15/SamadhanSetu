@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IssueReportRepository extends JpaRepository<Long , IssueReport> {
+public interface IssueReportRepository extends JpaRepository<IssueReport, Long> {
 
     // 🔍 Find by Category
     @Query(value = "SELECT * FROM issue_reports WHERE category = :category", nativeQuery = true)
