@@ -14,23 +14,31 @@ public class IssueReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String category;
-
-    @Column(length = 1000)
+    @Column(nullable = false, length = 2000)
     private String description;
 
-    private String photoUrl;
+    @Column(nullable = false)
+    private String category;
 
-    private String locationText;
-    private Double latitude;
-    private Double longitude;
+    @Column(nullable = false)
+    private String locationType;
 
-    private String reporterName;    // optional
-    private String reporterPhone;   // optional
+    @Column(nullable = false, length = 500)
+    private String location; // Could store JSON string for coordinates
 
-    private String status;
+    private String name; // Optional
 
-    private LocalDateTime submittedAt;
+    private String phone; // Optional
+
+    private String mediaUrl; // Path to the stored media file
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 
 
 }
