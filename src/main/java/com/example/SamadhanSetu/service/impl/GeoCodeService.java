@@ -1,4 +1,4 @@
-package com.example.SamadhanSetu.service;
+package com.example.SamadhanSetu.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

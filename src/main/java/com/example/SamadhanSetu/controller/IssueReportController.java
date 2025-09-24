@@ -1,42 +1,45 @@
 package com.example.SamadhanSetu.controller;
 
 import com.example.SamadhanSetu.dao.Entity.IssueReport;
-import com.example.SamadhanSetu.dto.ApiResponse;
-import com.example.SamadhanSetu.dto.IssueReportDto;
-import com.example.SamadhanSetu.service.IssueReportService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.SamadhanSetu.dto.RequestDto.IssueReportRequestDto;
+import com.example.SamadhanSetu.dto.ResponseDto.ApiResponse;
+import com.example.SamadhanSetu.dto.ResponseDto.IssueReportResponseDto;
+import com.example.SamadhanSetu.mapper.IssueReportMapper;
+import com.example.SamadhanSetu.service.impl.IssueReportService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@RequestMapping("/api/issue_report")
-@RequiredArgsConstructor
+@RequestMapping("/api")
 @CrossOrigin("*")
 public class IssueReportController {
 
-    @Autowired
-    private IssueReportService issueReportService;
 
-    @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse<IssueReport>> registerIssue(
-            @RequestPart("data") String data,
-            @RequestPart(value = "photo", required = false) MultipartFile photo) throws Exception {
+    private final IssueReportService issueReportService;
 
-        ObjectMapper mapper = new ObjectMapper();
-        IssueReportDto dto = mapper.readValue(data, IssueReportDto.class);
+    private final IssueReportMapper issueReportMapper;
 
-        IssueReport savedReport = issueReportService.registerIssue(dto, photo);
+    public IssueReportController(IssueReportService issueReportService, IssueReportMapper issueReportMapper) {
+        this.issueReportService = issueReportService;
+        this.issueReportMapper = issueReportMapper;
+    }
 
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Issue reported successfully ✅", savedReport)
+    @PostMapping(value = "/report-issue", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<ApiResponse<IssueReportResponseDto>> reportIssue(
+            @RequestPart("report") IssueReportRequestDto requestDto,
+            @RequestPart(value = "media", required = false) MultipartFile mediaFile) {
+
+        IssueReport createdIssue = issueReportService.createIssueReport(requestDto, mediaFile);
+        IssueReportResponseDto responseDto = issueReportMapper.toResponseDto(createdIssue);
+
+        ApiResponse<IssueReportResponseDto> response = new ApiResponse<>(
+                true,
+                "Issue reported successfully!",
+                responseDto
         );
 
-
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
