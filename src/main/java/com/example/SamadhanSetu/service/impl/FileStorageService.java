@@ -4,6 +4,7 @@ package com.example.SamadhanSetu.service.impl;
 import com.example.SamadhanSetu.Exceptions.FileStorageException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -17,10 +18,10 @@ import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
 public class FileStorageService {
 
+    @Autowired
     private final Path fileStorageLocation;
 
     public FileStorageService(@Value("${file.upload-dir}") String uploadDir) {

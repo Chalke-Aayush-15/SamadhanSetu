@@ -1,11 +1,11 @@
 package com.example.SamadhanSetu.service;
 
+import com.example.SamadhanSetu.Exceptions.ResourceNotFoundException;
 import com.example.SamadhanSetu.dao.Entity.Event;
 import com.example.SamadhanSetu.dao.Entity.EventStatus;
 import com.example.SamadhanSetu.dao.Repository.EventRepository;
 import com.example.SamadhanSetu.dto.EventCreateDTO;
 import com.example.SamadhanSetu.dto.EventDTO;
-import com.example.SamadhanSetu.exception.ResourceNotFoundException;
 import com.example.SamadhanSetu.mapper.EventMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
