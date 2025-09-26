@@ -12,8 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@RestController
 @RequestMapping("/api")
-@CrossOrigin("*")
+
 public class IssueReportController {
 
 
@@ -26,6 +27,7 @@ public class IssueReportController {
         this.issueReportMapper = issueReportMapper;
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(value = "/report-issue", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<ApiResponse<IssueReportResponseDto>> reportIssue(
             @RequestPart("report") IssueReportRequestDto requestDto,
